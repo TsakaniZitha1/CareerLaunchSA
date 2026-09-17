@@ -1,9 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
-    id("com.google.devtools.ksp")
-    id("com.google.gms.google-services")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.google.services)
 }
 
+// 1. Android Block
 android {
     namespace = "com.example.careerlaunchsa"
     compileSdk = 35
@@ -27,12 +28,25 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
+} // <--- CLOSE THE ANDROID BLOCK HERE
+
+// 2. Kotlin Block (Placed outside android {})
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
 }
 
+// 3. Dependencies Block
 dependencies {
     // AndroidX & UI
     implementation(libs.androidx.core.ktx)
@@ -54,9 +68,10 @@ dependencies {
     // Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
-    // Firebase Auth
+    // Firebase (using BoM for version management)
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
 
     // Testing
     testImplementation(libs.junit)
