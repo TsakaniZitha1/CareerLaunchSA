@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">CareerLaunchSA</string>
+    <string name="logo_description">CareerLaunch SA Logo</string>
+    <string name="career">Career</string>
+    <string name="launch">Launch</string>
+    <string name="auth_headline">Your career starts here.</string>
+    <string name="auth_subheadline">Discover IT internships &amp; graduate programmes across South Africa.</string>
+    <string name="toggle_register">Don\'t have an account? Register</string>
+    <string name="toggle_login">Already have an account? Sign In</string>
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_email">Email Address</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_sign_in">Sign In</string>
+    <string name="btn_register">Register</string>
+    <string name="label_or">— or —</string>
+    <string name="btn_google">Continue with Google</string>
 </resources>

@@ -55,8 +55,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
-    // Room Database
-    val roomVersion = "2.6.1"
+    // Room Database - Updated to 2.7.0-alpha11 for Kotlin 2.0 compatibility
+    val roomVersion = "2.7.0-alpha11"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
