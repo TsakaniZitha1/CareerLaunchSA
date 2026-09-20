@@ -11,24 +11,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CareerLaunchSA">
+
+        <activity
+            android:name=".CvActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".TrackerActivity"
+            android:exported="false" />
+
         <activity
             android:name=".activity_settings"
             android:exported="false" />
-        <activity
-            android:name=".item_job"
-            android:exported="false" />
+
         <activity
             android:name=".activity_main"
             android:exported="false" />
+
         <activity
             android:name=".activity_auth"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
