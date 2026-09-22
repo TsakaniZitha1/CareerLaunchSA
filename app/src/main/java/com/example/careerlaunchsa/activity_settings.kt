@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
 import com.example.careerlaunchsa.data.AppDatabase
 import com.example.careerlaunchsa.databinding.ActivitySettingsBinding
@@ -66,6 +67,21 @@ class activity_settings : AppCompatActivity() {
         }
 
         // SECTION 3: APP SETTINGS
+        // Set initial state of Dark Mode switch
+        val currentMode = AppCompatDelegate.getDefaultNightMode()
+        binding.switchDarkMode.isChecked = (currentMode == AppCompatDelegate.MODE_NIGHT_YES)
+
+        // Dark Mode Toggle Listener
+        binding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                Toast.makeText(this, "Dark mode enabled", Toast.LENGTH_SHORT).show()
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                Toast.makeText(this, "Light mode enabled", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         // Clear Room Database & Application Cache
         binding.btnClearCache.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
