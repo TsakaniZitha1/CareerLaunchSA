@@ -94,3 +94,6 @@ com.careerlaunchsa.app
 - A portal for employers to post their own jobs
 - A dashboard showing your application stats
 - Dark mode
+
+YOUTUBE LINK
+https://youtu.be/wJCTXsInDRU?si=6_tsBY5zUvnTOy3X
