@@ -2,6 +2,7 @@ package com.example.careerlaunchsa
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.careerlaunchsa.auth.AuthManager
@@ -58,18 +59,18 @@ class activity_auth : AppCompatActivity() {
 
     private fun updateUiMode() {
         if (isSignUpMode) {
-            binding.tilFullName.visibility = android.view.View.VISIBLE
+            binding.tilFullName.visibility = View.VISIBLE
             binding.btnAuthAction.text = "Register"
             binding.tvToggleMode.text = "Already have an account? Sign In"
         } else {
-            binding.tilFullName.visibility = android.view.View.GONE
+            binding.tilFullName.visibility = View.GONE
             binding.btnAuthAction.text = "Sign In"
             binding.tvToggleMode.text = "Don't have an account? Register"
         }
     }
 
     private fun navigateToMain() {
-        startActivity(Intent(this, activity_main::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 }
