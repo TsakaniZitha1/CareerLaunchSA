@@ -13,23 +13,50 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tvJobTitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Graduate Software Developer"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#0F172A" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tvCompanyName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TechCorp South Africa"
-            android:textSize="14sp"
-            android:textColor="#475569"
-            android:layout_marginTop="2dp" />
+            <TextView
+                android:id="@+id/tvCompanyAvatar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_rounded_card"
+                android:gravity="center"
+                android:text="SA"
+                android:textColor="#3B82F6"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="12dp"
+                android:backgroundTint="#F1F5F9"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvJobTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Graduate Software Developer"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#0F172A" />
+
+                <TextView
+                    android:id="@+id/tvCompanyName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TechCorp South Africa"
+                    android:textSize="14sp"
+                    android:textColor="#475569"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvJobLocation"

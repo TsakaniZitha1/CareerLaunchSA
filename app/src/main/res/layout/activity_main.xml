@@ -1,144 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/screen_bg"
-    android:orientation="vertical">
+    android:background="@color/screen_bg">
 
-    <!-- Compact Emerald Top Header -->
+    <!-- Top Container: Header, Search Bar, and Filter Chips -->
     <LinearLayout
-        android:id="@+id/headerBar"
+        android:id="@+id/topContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary_emerald"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="16dp">
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
 
+        <!-- Compact Emerald Top Header -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/headerBar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:background="@color/primary_emerald"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="CareerLaunch SA"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="IT &amp; Tech Career Portal"
-                android:textColor="#D1D5DB"
-                android:textSize="12sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CareerLaunch SA"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IT &amp; Tech Career Portal"
+                    android:textColor="#D1D5DB"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Single Profile / Person Icon -->
+            <ImageView
+                android:id="@+id/btnProfile"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="Profile"
+                android:focusable="true"
+                android:src="@drawable/baseline_person_24"
+                app:tint="#FFFFFF" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/btnSettings"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Settings"
-            android:src="@android:drawable/ic_menu_preferences"
-            app:tint="#FFFFFF" />
+        <!-- Search Bar -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/border_light"
+            app:strokeWidth="1dp">
+
+            <EditText
+                android:id="@+id/etSearchJobs"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@null"
+                android:hint="Search Kotlin, SQL, Cloud, Web..."
+                android:inputType="text"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/text_dark"
+                android:textColorHint="@color/text_muted"
+                android:textSize="14sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- IT Category Filter Chips -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="8dp"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupCategories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAll"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="All IT Roles" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipSoftware"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Software Dev" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipData"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Data &amp; SQL" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipCloud"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cloud &amp; DevOps" />
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
     </LinearLayout>
 
-    <!-- Search Bar -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="8dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="0dp"
-        app:strokeColor="@color/border_light"
-        app:strokeWidth="1dp">
-
-        <EditText
-            android:id="@+id/etSearchJobs"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@null"
-            android:hint="Search Kotlin, SQL, Cloud, Web..."
-            android:inputType="text"
-            android:paddingHorizontal="16dp"
-            android:textColor="@color/text_dark"
-            android:textColorHint="@color/text_muted"
-            android:textSize="14sp" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- IT Category Filter Chips -->
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:paddingHorizontal="16dp"
-        android:paddingBottom="8dp"
-        android:scrollbars="none">
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupCategories"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:singleSelection="true">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipAll"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="All IT Roles" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipSoftware"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Software Dev" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipData"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Data &amp; SQL" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipCloud"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_width"
-                android:layout_height="wrap_content"
-                android:text="Cloud &amp; DevOps" />
-        </com.google.android.material.chip.ChipGroup>
-    </HorizontalScrollView>
-
-    <!-- Job Feed RecyclerView -->
+    <!-- Job Feed RecyclerView (Constrained between Top Container and Bottom Nav) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvJobFeed"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigation"
+        android:layout_below="@id/topContainer"
         android:clipToPadding="false"
         android:paddingVertical="4dp" />
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Pinned Bottom Navigation Bar -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="#FFFFFF"
         app:elevation="8dp"
         app:itemIconTint="@color/primary_emerald"
         app:itemTextColor="@color/primary_emerald"
         app:menu="@menu/bottom_nav_menu" />
 
-</LinearLayout>
+</RelativeLayout>
