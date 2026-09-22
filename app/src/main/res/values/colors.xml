@@ -6,6 +6,7 @@
     <color name="primary_emerald_light">#1DB954</color>
     <color name="bright_green">#35A84A</color>
     <color name="screen_bg">#F4F5F3</color>
+    <color name="card_bg">#FFFFFF</color>
 
     <!-- Text Colors -->
     <color name="text_dark">#222222</color>
@@ -28,4 +29,34 @@
 
     <color name="status_pink_bg">#FCE7E7</color>
     <color name="status_pink_text">#C84848</color>
+
+    <!-- Essential Colors -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+
+    <!-- Default colors referenced by themes (you can update themes.xml to use your brand colors instead) -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+
+        <!-- Status Badge & Summary Card Colors -->
+        <color name="status_applied_bg">#EEF5FF</color>
+        <color name="status_applied_text">#1D4ED8</color>
+        <color name="status_interview_bg">#FFF6CC</color>
+        <color name="status_interview_text">#854D0E</color>
+        <color name="status_offer_bg">#E8F7EC</color>
+        <color name="status_offer_text">#147A32</color>
+        <color name="status_unsuccessful_bg">#FDECEC</color>
+        <color name="status_unsuccessful_text">#991B1B</color>
+
+        <!-- Remove Action Colors -->
+        <color name="remove_bg">#FDECEC</color>
+        <color name="remove_text">#991B1B</color>
+
+        <!-- Circle Icon Placeholder -->
+        <color name="circle_placeholder">#6D28D9</color>
+
 </resources>

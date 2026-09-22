@@ -5,6 +5,10 @@
         android:icon="@android:drawable/ic_menu_search"
         android:title="Browse" />
     <item
+        android:id="@+id/nav_saved_jobs"
+        android:icon="@android:drawable/btn_star"
+        android:title="Saved" />
+    <item
         android:id="@+id/nav_applications"
         android:icon="@android:drawable/ic_menu_myplaces"
         android:title="Applications" />

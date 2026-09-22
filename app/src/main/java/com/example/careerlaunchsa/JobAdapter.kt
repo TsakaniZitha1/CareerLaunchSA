@@ -3,37 +3,48 @@ package com.example.careerlaunchsa
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.careerlaunchsa.data.JobEntity
 import com.example.careerlaunchsa.databinding.ActivityItemJobBinding
-import com.example.careerlaunchsa.network.JobResponse
 
 class JobAdapter(
-    private val jobList: MutableList<JobResponse>,
-    private val onSaveClick: (JobResponse) -> Unit,
-    private val onApplyClick: (JobResponse) -> Unit
+    private val jobList: MutableList<JobEntity>,
+    private val onSaveClick: (JobEntity) -> Unit,
+    private val onApplyClick: (JobEntity) -> Unit
 ) : RecyclerView.Adapter<JobAdapter.JobViewHolder>() {
 
-    inner class JobViewHolder(val binding: ActivityItemJobBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class JobViewHolder(val binding: ActivityItemJobBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
-        val binding = ActivityItemJobBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ActivityItemJobBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return JobViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
         val job = jobList[position]
-        holder.binding.tvJobTitle.text = job.title
-        holder.binding.tvCompanyName.text = job.company
-        holder.binding.tvJobLocation.text = job.location
+        holder.binding.apply {
+            tvJobTitle.text = job.title
+            tvCompanyName.text = job.company
+            tvJobLocation.text = job.location
 
-        holder.binding.btnSaveOffline.setOnClickListener { onSaveClick(job) }
-        holder.binding.btnApply.setOnClickListener { onApplyClick(job) }
+            // Dynamic company avatar initials
+            val initials = if (job.company.length >= 2) job.company.substring(0, 2).uppercase() else "SA"
+            tvCompanyAvatar.text = initials
+
+            btnSaveOffline.setOnClickListener { onSaveClick(job) }
+            btnApply.setOnClickListener { onApplyClick(job) }
+        }
     }
 
     override fun getItemCount(): Int = jobList.size
 
-    fun updateData(newJobs: List<JobResponse>) {
+    fun updateList(newList: List<JobEntity>) {
         jobList.clear()
-        jobList.addAll(newJobs)
+        jobList.addAll(newList)
         notifyDataSetChanged()
     }
 }

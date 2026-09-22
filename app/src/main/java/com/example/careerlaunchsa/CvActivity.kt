@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.careerlaunchsa.databinding.ActivityCvBinding
@@ -29,6 +30,8 @@ class CvActivity : AppCompatActivity() {
         binding = ActivityCvBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupBackNavigation()
+
         binding.btnUploadCv.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
                 type = "*/*"
@@ -36,5 +39,19 @@ class CvActivity : AppCompatActivity() {
             }
             cvPickerLauncher.launch(intent)
         }
+    }
+
+    private fun setupBackNavigation() {
+        // 1. UI Back Button click in top header
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
+
+        // 2. Physical back button / Android gesture back handler
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+        })
     }
 }
