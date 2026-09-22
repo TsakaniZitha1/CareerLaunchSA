@@ -1,6 +1,6 @@
 # CareerLaunch SA
 
-I built this app to solve a problem I kept running into: finding IT internships and graduate programmes in South Africa usually means scrolling through a dozen different websites and WhatsApp groups. CareerLaunch SA puts them all in one place.
+We built this app to solve a problem I kept running into: finding IT internships and graduate programmes in South Africa usually means scrolling through a dozen different websites and WhatsApp groups. CareerLaunch SA puts them all in one place.
 
 It is an Android app where students and recent graduates can browse IT opportunities, apply, upload their CV and keep track of where they applied.
 
@@ -23,9 +23,9 @@ It is an Android app where students and recent graduates can browse IT opportuni
 - Get job alerts and notifications when your application status changes
 - Change your password, log out of all devices, manage offline sync and check data usage in Settings
 
-## How I built it
+## How we built it
 
-| Part | What I used |
+| Part | What we used |
 | --- | --- |
 | Language | Kotlin |
 | Platform | Android |
@@ -87,7 +87,7 @@ com.careerlaunchsa.app
 └── utils/             # helpers
 ```
 
-## What I would add next
+## What we would add next
 
 - Interview scheduling inside the app
 - CV parsing that fills in your profile automatically
