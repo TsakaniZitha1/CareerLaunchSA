@@ -4,19 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.careerlaunchsa.data.AppDatabase
+import com.example.careerlaunchsa.data.CachedJobEntity
 import com.example.careerlaunchsa.data.JobEntity
 import com.example.careerlaunchsa.databinding.ActivityMainBinding
 import com.example.careerlaunchsa.network.RetrofitClient
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.example.careerlaunchsa.utils.NetworkObserver
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,19 +28,37 @@ class MainActivity : AppCompatActivity() {
     private lateinit var jobAdapter: JobAdapter
     private var allJobsList = mutableListOf<JobEntity>()
     private var currentCategory = "All"
+    private lateinit var networkObserver: NetworkObserver
+    private var isCurrentlyOnline = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupRecyclerView()
-        loadITSampleJobs() // Start with local data so screen is never blank
-        fetchJobsFromApi()
+        networkObserver = NetworkObserver(this)
 
+        setupRecyclerView()
         setupSearchAndFilters()
         setupBottomNavigation()
         setupHeaderButtons()
+        observeNetworkState()
+    }
+
+    private fun observeNetworkState() {
+        lifecycleScope.launch {
+            networkObserver.observe().collectLatest { isOnline ->
+                isCurrentlyOnline = isOnline
+                if (isOnline) {
+                    binding.bannerOffline.visibility = View.GONE
+                    fetchJobsFromApi()
+                } else {
+                    binding.bannerOffline.visibility = View.VISIBLE
+                    binding.tvOfflineBanner.text = "Offline Mode — Displaying cached jobs"
+                    loadCachedJobsOrDefaults()
+                }
+            }
+        }
     }
 
     private fun fetchJobsFromApi() {
@@ -62,23 +84,71 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
+                val db = AppDatabase.getDatabase(applicationContext)
+
                 withContext(Dispatchers.Main) {
                     if (jobsFromNetwork.isNotEmpty()) {
                         allJobsList.clear()
                         allJobsList.addAll(jobsFromNetwork)
-                        jobAdapter.updateList(allJobsList)
-                        Toast.makeText(this@MainActivity, "Loaded jobs from REST API!", Toast.LENGTH_SHORT).show()
+                        applyCombinedFilter(binding.etSearchJobs.text.toString(), currentCategory)
+                        binding.bannerOffline.visibility = View.GONE
+                        Toast.makeText(this@MainActivity, "Loaded latest jobs online!", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(this@MainActivity, "API returned no jobs, using offline data", Toast.LENGTH_LONG).show()
-                        loadITSampleJobs()
+                        binding.bannerOffline.visibility = View.VISIBLE
+                        binding.tvOfflineBanner.text = "Offline Mode — Displaying cached jobs"
+                        loadCachedJobsOrDefaults()
                     }
                 }
+
+                // Cache jobs into Room database for offline accessibility
+                if (jobsFromNetwork.isNotEmpty()) {
+                    val cachedEntities = jobsFromNetwork.map { it.toCachedJobEntity() }
+                    db.cachedJobDao().clearCachedJobs()
+                    db.cachedJobDao().insertCachedJobs(cachedEntities)
+                }
+
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@MainActivity, "API Error: ${e.message}", Toast.LENGTH_LONG).show()
+                    binding.bannerOffline.visibility = View.VISIBLE
+                    binding.tvOfflineBanner.text = "Offline Mode — Displaying cached jobs"
+                    loadCachedJobsOrDefaults()
+                }
+            }
+        }
+    }
+
+    private fun loadCachedJobsOrDefaults() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val db = AppDatabase.getDatabase(applicationContext)
+            val cachedJobs = db.cachedJobDao().getAllCachedJobs()
+
+            withContext(Dispatchers.Main) {
+                if (cachedJobs.isNotEmpty()) {
+                    allJobsList.clear()
+                    allJobsList.addAll(cachedJobs.map { it.toJobEntity() })
+                    applyCombinedFilter(binding.etSearchJobs.text.toString(), currentCategory)
+                } else {
                     loadITSampleJobs()
                 }
             }
+        }
+    }
+
+    private fun loadITSampleJobs() {
+        val samples = listOf(
+            JobEntity("1", "Junior Kotlin Developer", "Capitec", "Stellenbosch", "Software Dev", "Closes: 15 Oct"),
+            JobEntity("2", "SQL Analyst", "Standard Bank", "Johannesburg", "Data & SQL", "Closes: 28 Sep"),
+            JobEntity("3", "Full Stack Developer", "Vodacom", "Midrand", "Software Dev", "Closes: 10 Oct"),
+            JobEntity("4", "Cloud Engineer", "Derivco", "Durban", "Cloud & DevOps", "Closes: 05 Oct")
+        )
+        allJobsList.clear()
+        allJobsList.addAll(samples)
+        applyCombinedFilter(binding.etSearchJobs.text.toString(), currentCategory)
+
+        // Save sample jobs to cache database so subsequent offline launches retain them
+        lifecycleScope.launch(Dispatchers.IO) {
+            val db = AppDatabase.getDatabase(applicationContext)
+            db.cachedJobDao().insertCachedJobs(samples.map { it.toCachedJobEntity() })
         }
     }
 
@@ -111,16 +181,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun loadITSampleJobs() {
-        allJobsList = mutableListOf(
-            JobEntity("1", "Junior Kotlin Developer", "Capitec", "Stellenbosch", "Software Dev", "Closes: 15 Oct"),
-            JobEntity("2", "SQL Analyst", "Standard Bank", "Johannesburg", "Data & SQL", "Closes: 28 Sep"),
-            JobEntity("3", "Full Stack Developer", "Vodacom", "Midrand", "Software Dev", "Closes: 10 Oct"),
-            JobEntity("4", "Cloud Engineer", "Derivco", "Durban", "Cloud & DevOps", "Closes: 05 Oct")
-        )
-        jobAdapter.updateList(allJobsList)
     }
 
     private fun setupSearchAndFilters() {
@@ -183,4 +243,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, CvActivity::class.java))
         }
     }
+
+    private fun CachedJobEntity.toJobEntity() = JobEntity(jobId, title, company, location, category, description)
+    private fun JobEntity.toCachedJobEntity() = CachedJobEntity(jobId, title, company, location, category, description)
 }

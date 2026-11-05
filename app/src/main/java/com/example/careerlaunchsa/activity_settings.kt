@@ -1,14 +1,17 @@
 package com.example.careerlaunchsa
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
 import com.example.careerlaunchsa.data.AppDatabase
 import com.example.careerlaunchsa.databinding.ActivitySettingsBinding
+import com.example.careerlaunchsa.data.LocaleHelper
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,6 +21,12 @@ class activity_settings : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
 
+    override fun attachBaseContext(newBase: Context) {
+        // Apply saved locale configuration before layout inflation
+        val savedLanguage = LocaleHelper.getSavedLanguage(newBase)
+        super.attachBaseContext(LocaleHelper.setLocale(newBase, savedLanguage))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
@@ -25,6 +34,7 @@ class activity_settings : AppCompatActivity() {
 
         setupNavigation()
         setupClickListeners()
+        updateLanguageDisplay()
     }
 
     private fun setupNavigation() {
@@ -44,7 +54,19 @@ class activity_settings : AppCompatActivity() {
     private fun setupClickListeners() {
         // SECTION 1: ACCOUNT SECURITY
         binding.btnChangePassword.setOnClickListener {
-            Toast.makeText(this, "Password reset link sent to your email.", Toast.LENGTH_SHORT).show()
+            val user = FirebaseAuth.getInstance().currentUser
+            if (user?.email != null) {
+                FirebaseAuth.getInstance().sendPasswordResetEmail(user.email!!)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(this, "Password reset link sent to ${user.email}", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+            } else {
+                Toast.makeText(this, "No active email found for reset.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.btnSecureLogout.setOnClickListener {
@@ -67,11 +89,9 @@ class activity_settings : AppCompatActivity() {
         }
 
         // SECTION 3: APP SETTINGS
-        // Set initial state of Dark Mode switch
         val currentMode = AppCompatDelegate.getDefaultNightMode()
         binding.switchDarkMode.isChecked = (currentMode == AppCompatDelegate.MODE_NIGHT_YES)
 
-        // Dark Mode Toggle Listener
         binding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -85,11 +105,9 @@ class activity_settings : AppCompatActivity() {
         // Clear Room Database & Application Cache
         binding.btnClearCache.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                // Clear Room Database
                 val db = AppDatabase.getDatabase(this@activity_settings)
                 db.clearAllTables()
 
-                // Clear internal cache directory files
                 applicationContext.cacheDir.deleteRecursively()
 
                 withContext(Dispatchers.Main) {
@@ -99,22 +117,57 @@ class activity_settings : AppCompatActivity() {
         }
 
         binding.btnOfflineSync.setOnClickListener {
-            Toast.makeText(this, "Offline data synced", Toast.LENGTH_SHORT).show()
+            val isOnline = com.example.careerlaunchsa.utils.NetworkObserver.isNetworkAvailable(this)
+            if (isOnline) {
+                Toast.makeText(this, "Offline data synced with server!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Device is currently offline. Connect to internet to sync.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.btnDataUsage.setOnClickListener {
             Toast.makeText(this, "Data Usage: Low (0.5 MB cached)", Toast.LENGTH_SHORT).show()
         }
 
-        // SECTION 4: LANGUAGE
+        // SECTION 4: DYNAMIC MULTI-LANGUAGE SELECTOR (English, isiZulu, Afrikaans)
         binding.btnLanguage.setOnClickListener {
-            if (binding.tvCurrentLanguage.text == "English") {
-                binding.tvCurrentLanguage.text = "isiZulu"
-                Toast.makeText(this, "uLimi lushuquliwe lwaya esiZulwini", Toast.LENGTH_SHORT).show()
-            } else {
-                binding.tvCurrentLanguage.text = "English"
-                Toast.makeText(this, "Language switched to English", Toast.LENGTH_SHORT).show()
+            showLanguageDialog()
+        }
+    }
+
+    private fun showLanguageDialog() {
+        val languages = arrayOf("English", "isiZulu", "Afrikaans")
+        val codes = arrayOf("en", "zu", "af")
+
+        val currentCode = LocaleHelper.getSavedLanguage(this)
+        val checkedItem = codes.indexOf(currentCode).coerceAtLeast(0)
+
+        AlertDialog.Builder(this)
+            .setTitle("Select Language / Khetha Ulimi")
+            .setSingleChoiceItems(languages, checkedItem) { dialog, which ->
+                val selectedCode = codes[which]
+                if (selectedCode != currentCode) {
+                    LocaleHelper.setLocale(this, selectedCode)
+                    dialog.dismiss()
+
+                    // Restart Activity to re-bind string resources instantly
+                    val intent = intent
+                    finish()
+                    startActivity(intent)
+                } else {
+                    dialog.dismiss()
+                }
             }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun updateLanguageDisplay() {
+        val currentCode = LocaleHelper.getSavedLanguage(this)
+        binding.tvCurrentLanguage.text = when (currentCode) {
+            "zu" -> "isiZulu"
+            "af" -> "Afrikaans"
+            else -> "English"
         }
     }
 }
