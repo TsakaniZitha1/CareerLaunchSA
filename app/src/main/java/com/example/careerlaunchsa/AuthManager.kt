@@ -1,4 +1,4 @@
-package com.example.careerlaunchsa.auth
+package com.example.careerlaunchsa
 
 import com.google.firebase.auth.FirebaseAuth
 

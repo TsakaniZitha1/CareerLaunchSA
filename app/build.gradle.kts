@@ -68,10 +68,12 @@ dependencies {
     // Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
-    // Firebase (using BoM for version management)
+    // Firebase & Google Sign-In
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
 
     // Testing
     testImplementation(libs.junit)
