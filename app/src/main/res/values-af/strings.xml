@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">CareerLaunchSA</string>
+    <string name="logo_description">CareerLaunch SA Logo</string>
+    <string name="career">Loopbaan</string>
+    <string name="launch">Loods</string>
+    <string name="auth_headline">Jou loopbaan begin hier.</string>
+    <string name="auth_subheadline">Ontdek IT-internskappe en gegradueerde programme regoor Suid-Afrika.</string>
+    <string name="toggle_register">Het jy nie \'n rekening nie? Registreer</string>
+    <string name="toggle_login">Het jy reeds \'n rekening? Teken in</string>
+    <string name="hint_full_name">Volle Naam</string>
+    <string name="hint_email">E-posadres</string>
+    <string name="hint_password">Wagwoord</string>
+    <string name="btn_sign_in">Teken In</string>
+    <string name="btn_register">Registreer</string>
+    <string name="label_or">— of —</string>
+    <string name="btn_google">Gaan voort met Google</string>
+</resources>

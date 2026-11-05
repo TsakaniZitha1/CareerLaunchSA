@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">CareerLaunchSA</string>
+    <string name="logo_description">I-Logo ye-CareerLaunch SA</string>
+    <string name="career">Umsebenzi</string>
+    <string name="launch">Qala</string>
+    <string name="auth_headline">Umsebenzi wakho uqala lapha.</string>
+    <string name="auth_subheadline">Thola ama-internship nezinqubo zabafundi abaphothule ze-IT eNingizimu Afrika yonke.</string>
+    <string name="toggle_register">Aunayo i-akhawunti? Bhalisa</string>
+    <string name="toggle_login">Usunayo i-akhawunti? Ngena</string>
+    <string name="hint_full_name">Igama Eliphelele</string>
+    <string name="hint_email">Ikolomu Ye-imeyili</string>
+    <string name="hint_password">Iphasiwedi</string>
+    <string name="btn_sign_in">Ngena</string>
+    <string name="btn_register">Bhalisa</string>
+    <string name="label_or">— noma —</string>
+    <string name="btn_google">Qhubeka nge-Google</string>
+</resources>
